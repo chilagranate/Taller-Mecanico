@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/contacto_nuevo_guardar"
+    <item android:id="@+id/clientes_actualizar"
         android:title="@string/nuevo_contacto_boton1"
-        android:icon="@drawable/add_image"
+        android:icon="@drawable/ic_sync"
         app:showAsAction="always"/>
 
 

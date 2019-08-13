@@ -6,12 +6,5 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/agregar_cliente"
-        android:orderInCategory="101"
-        android:title="Nuevo cliente"
-        app:showAsAction="never"
 
-
-        />
 </menu>

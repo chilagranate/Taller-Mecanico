@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/cliente_editar"
+        android:title="@string/vista_cliente_editar"
+        android:icon="@drawable/ic_edit"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/cliente_eliminar"
+        android:title="@string/vista_cliente_eliminar"
+        android:icon="@drawable/ic_delete"
+        app:showAsAction="always"/>
+
+
+
+</menu>

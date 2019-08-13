@@ -2,30 +2,31 @@ package com.chila.tallermecanico.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.chila.tallermecanico.Firestore.ConstFirestore;
+
+
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import android.widget.Toast;
 
 
-import com.chila.tallermecanico.Firestore.Firestore;
+
+
 import com.chila.tallermecanico.R;
+import com.chila.tallermecanico.model.Cliente;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import static android.content.ContentValues.TAG;
 
 public class NuevoCliente extends AppCompatActivity {
-
-
 
 
     @Override
@@ -48,6 +49,7 @@ public class NuevoCliente extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.contacto_nuevo_guardar:
                 guardarContacto();
+                finish();
                 break;
 
         }
@@ -72,24 +74,30 @@ public class NuevoCliente extends AppCompatActivity {
         String telefono = contactoTelefono.getText().toString();
 
 
-        Map<String, Object> cliente = new HashMap<>();
-        cliente.put(ConstFirestore.CLIENTES_NOMBRE, nombre);
-        cliente.put(ConstFirestore.CLIENTES_APELLIDO, apellido);
-        cliente.put(ConstFirestore.CLIENTES_DNI, dni);
-        cliente.put(ConstFirestore.CLIENTES_EMAIL, email);
-        cliente.put(ConstFirestore.CLIENTES_DIRECCION, direccion);
-        cliente.put(ConstFirestore.CLIENTES_TELEFONOS, telefono);
-
-        Firestore db = new Firestore();
-        db.insertarContacto(cliente);
+        Cliente cliente = new Cliente(nombre, apellido, dni, telefono, email, direccion);
+        cliente.setFoto(R.drawable.ic_persona);
+        cliente.setUser(FirebaseAuth.getInstance().getUid()); //le agrego UID para lectura
 
 
-
-
-// Add a new document with a generated ID
-
-
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db
+                .collection("clientes")
+                .add(cliente).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 
+
 }
+
+
 

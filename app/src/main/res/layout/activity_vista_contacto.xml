@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.VistaContacto"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp">
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/vista_contacto_foto"
+        android:layout_width="@dimen/contacto_view_foto"
+        android:layout_height="@dimen/contacto_view_foto"
+        android:layout_gravity="center"
+
+        app:civ_border_color="#EEEEEE"
+        app:civ_shadow_radius="10"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:id="@+id/vista_contacto_nombre"
+        android:layout_marginTop="@dimen/contacto_view_margintop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="nombre de prueba"
+        android:textSize="38sp"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        />
+    <TextView
+        android:id="@+id/vista_contacto_telefono"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="29sp"
+        tools:text="1568929329"
+        android:gravity="center"
+        android:layout_marginTop="5dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/contacto_view_email"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/colorAccent"/>
+    <TextView
+        android:id="@+id/vista_contacto_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="maildeprueba@gmail.com"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/contacto_view_direccion"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/colorAccent"
+        />
+
+    <TextView
+        android:id="@+id/vista_contacto_direccion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Av independencia 1242"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/vista_contacto_dni"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/colorAccent"/>
+
+    <TextView
+        android:id="@+id/vista_contacto_dni"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="14421851"
+        android:textSize="20sp"/>
+
+
+
+</LinearLayout>

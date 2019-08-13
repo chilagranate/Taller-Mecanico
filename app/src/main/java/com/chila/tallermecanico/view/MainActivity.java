@@ -25,21 +25,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
-
-
+import android.widget.Switch;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        currentUser= mAuth.getCurrentUser();
+        if(currentUser==null){
+            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+            startActivity(intent);
+
+        }
+
+
+
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -84,9 +95,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.agregar_cliente:
-                Intent intent1 = new Intent(this, NuevoCliente.class);
-                startActivity(intent1);
+            case 0:
+
                 break;
         }
 
@@ -94,22 +104,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
+
+
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        switch(id) {
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            case R.id.nav_clientes:
+                Intent intent1 = new Intent(this, ListaContactos.class);
+                startActivity(intent1);
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+                break;
+            case R.id.nav_cerrar_sesion:
+                mAuth.signOut();
+                Intent intent2 = new Intent(this, LoginActivity.class);
+                startActivity(intent2);
+                finish();
 
         }
 
@@ -117,8 +130,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 
 
 }
