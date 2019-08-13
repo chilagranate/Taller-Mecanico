@@ -73,7 +73,7 @@ public class ListaContactos extends AppCompatActivity implements BottomNavigatio
         listaClientes.setAdapter(adapter);
 
         activity = this;
-        obtenerClientes();
+
     }
 
 
@@ -98,7 +98,7 @@ public class ListaContactos extends AppCompatActivity implements BottomNavigatio
 
     @Override
     protected void onStart() {
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
         super.onStart();
     }
 
@@ -112,6 +112,8 @@ public class ListaContactos extends AppCompatActivity implements BottomNavigatio
     @Override
     protected void onResume() {
         super.onResume();
+        clientes.clear();
+        obtenerClientes();
         adapter.notifyDataSetChanged();
 
 
@@ -120,6 +122,7 @@ public class ListaContactos extends AppCompatActivity implements BottomNavigatio
     public void obtenerClientes() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        progressBar.setVisibility(View.VISIBLE);
         db.collection("clientes").whereEqualTo("user", user.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -139,6 +142,7 @@ public class ListaContactos extends AppCompatActivity implements BottomNavigatio
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
+                        progressBar.setVisibility(View.INVISIBLE);
                         adapter.notifyDataSetChanged();
 
                     }
