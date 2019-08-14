@@ -42,4 +42,5 @@
     <string name="iniciar_sesion_con_google">Iniciar sesion con google</string>
     <string name="login_registrarme">Registrarme</string>
     <string name="cerrar_sesion">Cerrar sesión</string>
+    <string name="guardar_cliente">Guardar cliente</string>
 </resources>

@@ -1,18 +1,11 @@
 package com.chila.tallermecanico.view;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.LocalActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,40 +15,26 @@ import android.widget.ProgressBar;
 import com.chila.tallermecanico.R;
 import com.chila.tallermecanico.adapter.ClienteAdaptador;
 import com.chila.tallermecanico.model.Cliente;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.chila.tallermecanico.presenter.IListaContactosPresentador;
+import com.chila.tallermecanico.presenter.ListaContactosPresentador;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
+public class ListaContactos extends AppCompatActivity implements IListaContactos {
+    private RecyclerView RvClientes;
+    private IListaContactosPresentador presentador;
 
-public class ListaContactos extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private RecyclerView listaClientes;
-
-    private Activity activity;
-    private ClienteAdaptador adapter;
-    private List<Cliente> clientes;
     private ProgressBar progressBar;
-    LocalActivityManager mlam = new LocalActivityManager(this, true);
-
+    private FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_contactos);
 
-        listaClientes = findViewById(R.id.contactos_recyclerview);
-        listaClientes.setHasFixedSize(true);
-        listaClientes.setLayoutManager(new LinearLayoutManager(this));
 
+        //RvClientes.setHasFixedSize(true);
+        RvClientes = findViewById(R.id.contactos_recyclerview);
         progressBar = findViewById(R.id.progressbar);
 
 
@@ -68,33 +47,41 @@ public class ListaContactos extends AppCompatActivity implements BottomNavigatio
             }
         });
 
-        clientes = new ArrayList<>();
-        adapter = new ClienteAdaptador(clientes, this);
-        listaClientes.setAdapter(adapter);
-
-        activity = this;
+        presentador = new ListaContactosPresentador(this);
 
     }
 
+    public void inicializarAdaptador(ClienteAdaptador adaptador){
+        RvClientes.setAdapter(adaptador);
+    }
 
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public void generarLayout(){
+        RvClientes.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public ClienteAdaptador crearAdaptador(List<Cliente> clientes){
+        ClienteAdaptador adaptador = new ClienteAdaptador(clientes, this);
+        return adaptador;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch (id) {
 
+        //noinspection SimplifiableIfStatement
+        switch (id) {
             case R.id.clientes_actualizar:
-                obtenerClientes();
-                adapter.notifyDataSetChanged();
+                presentador.obtenerClientes();
+                //adapter.notifyDataSetChanged();
+                break;
+            case 0:
                 break;
         }
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+
+        return super.onOptionsItemSelected(item);
     }
-
-
-
-
 
     @Override
     protected void onStart() {
@@ -112,44 +99,7 @@ public class ListaContactos extends AppCompatActivity implements BottomNavigatio
     @Override
     protected void onResume() {
         super.onResume();
-        clientes.clear();
-        obtenerClientes();
-        adapter.notifyDataSetChanged();
-
-
-    }
-
-    public void obtenerClientes() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        progressBar.setVisibility(View.VISIBLE);
-        db.collection("clientes").whereEqualTo("user", user.getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
-                    @Override
-
-                    public void onComplete(Task<QuerySnapshot> task) {
-                        progressBar.setVisibility(View.GONE);
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " =>" + document.getData());
-                                Cliente cliente = document.toObject(Cliente.class);
-                                cliente.setId(document.getId());
-                                cliente.setFoto(R.drawable.ic_persona);
-                                ListaContactos.this.clientes.add(cliente);
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                        progressBar.setVisibility(View.INVISIBLE);
-                        adapter.notifyDataSetChanged();
-
-                    }
-
-                });
-
-
+        presentador.obtenerClientes();
     }
 
 

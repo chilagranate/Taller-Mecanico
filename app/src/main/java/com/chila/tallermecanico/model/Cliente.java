@@ -1,13 +1,24 @@
 package com.chila.tallermecanico.model;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class Cliente {
 
     private String id;
-
-
     private String user;
     private String nombre;
     private String apellido;
@@ -17,16 +28,10 @@ public class Cliente {
     private String direccion;
     private int foto;
 
-    public int getFoto() {
-        return foto;
-    }
-
-    public void setFoto(int foto) {
-        this.foto = foto;
-    }
 
 
 
+//constructors
     public Cliente (){
 
     }
@@ -41,6 +46,16 @@ public class Cliente {
 
     }
 
+//GETTERS AND SETTERS
+
+    public int getFoto() {
+        return foto;
+    }
+
+    public void setFoto(int foto) {
+        this.foto = foto;
+    }
+
     public String getUser() {
         return user;
     }
@@ -48,6 +63,7 @@ public class Cliente {
     public void setUser(String user) {
         this.user = user;
     }
+
     public String getId() {
         return id;
     }
@@ -84,7 +100,7 @@ public class Cliente {
         return telefono;
     }
 
-    public void setTelefono(String telefonos) {
+    public void setTelefono(String telefono) {
 
         this.telefono = telefono;
     }
@@ -103,5 +119,47 @@ public class Cliente {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+
+
+    public Cliente (String id){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference docRef = db.collection("clientes").document(id);
+        docRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+
+                            if (document.exists()) {
+                                Cliente cliente = document.toObject(Cliente.class);
+                                nombre = cliente.getNombre();
+                                apellido = cliente.getApellido();
+                                dni = cliente.getDni();
+                                telefono = cliente.getTelefono();
+                                email = cliente.getEmail();
+                                direccion=cliente.getDireccion();
+                                user = cliente.getUser();
+                                setId(document.getId());
+
+
+                                Log.d(TAG, document.getId() + " =>" + document.getData());
+
+                            } else {
+
+                                Log.d(TAG, "No such document");
+                            }
+
+                        }
+
+                    }
+                });
+
     }
 }
