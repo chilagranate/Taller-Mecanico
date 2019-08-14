@@ -12,7 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.chila.tallermecanico.Firestore.Database;
 import com.chila.tallermecanico.R;
+import com.chila.tallermecanico.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -22,7 +24,6 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "CustomAuthActivity";
-
 
     TextView tvUsuario, tvcontrasena, tvRecuperoContrasena;
     Button btInicioSesion, btInicioSesionGoogle, btRegistrarse;
@@ -59,17 +60,15 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()) {
+                                if (task.isSuccessful()) {
                                     Log.d(TAG, "login sucesfull)");
                                     progressBar.setVisibility(View.INVISIBLE);
                                     iniciarMain();
-                                }else{
-                                    Log.w(TAG,"Login error");
-                                    Toast toastError = Toast.makeText(LoginActivity.this, "Error de inicio de sesión",Toast.LENGTH_LONG);
+                                } else {
+                                    Log.w(TAG, "Login error");
+                                    Toast toastError = Toast.makeText(LoginActivity.this, "Error de inicio de sesión", Toast.LENGTH_LONG);
                                     toastError.show();
                                 }
-
-
                             }
                         });
             }
@@ -81,27 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 String email = tvUsuario.getText().toString();
                 String password = tvcontrasena.getText().toString();
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "createUserWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    progressBar.setVisibility(View.INVISIBLE);
-
-                                    //updateUI(user);
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-
-                                    //updateUI(null);
-                                }
-
-                                // ...
-                            }
-                        });
+                crearUsuario(email, password);
 
             }
 
@@ -113,15 +92,12 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
-        //updateUI(currentUser);
-
     }
 
-    protected void iniciarMain(){
+    protected void iniciarMain() {
         progressBar.setVisibility(View.VISIBLE);
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser !=null){
+        if (currentUser != null) {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -129,5 +105,35 @@ public class LoginActivity extends AppCompatActivity {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
+    private void crearUsuario(String usuario, String contraseña) {
+        mAuth.createUserWithEmailAndPassword(usuario, contraseña)
+                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            progressBar.setVisibility(View.INVISIBLE);
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            crearUsuarioFirestore(user.getUid());
+                        } else {
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    private void crearUsuarioFirestore(final String uid) {
+        Database db = Database.getInstance();
+        Usuario usuario = new Usuario(uid, tvUsuario.getText().toString());
+        db.crearUsuario(usuario);
+
+
+    }
+
 
 }
+
+

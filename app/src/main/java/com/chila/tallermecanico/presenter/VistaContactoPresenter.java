@@ -9,6 +9,8 @@ public class VistaContactoPresenter implements IVistaContactoPresenter  {
 
     private IVistaContacto iVistaContacto;
     private String userId;
+    private Cliente cliente;
+    private Database db = Database.getInstance();
 
     public VistaContactoPresenter(IVistaContacto iVistaContacto, String userId){
         this.iVistaContacto = iVistaContacto;
@@ -17,18 +19,27 @@ public class VistaContactoPresenter implements IVistaContactoPresenter  {
     }
 
     public void obtenerCliente(){
-        Database db = Database.getInstance();
         db.obtenerCliente(userId, new FirestoreCallbackCliente() {
             @Override
             public void onCallBack(Cliente cliente) {
+
                 mostrarCliente(cliente);
             }
         });
-
     }
 
     public void mostrarCliente(Cliente cliente){
+        this.cliente = cliente;
         iVistaContacto.cargarCliente(cliente);
+    }
+
+    public void eliminarCliente(){
+        db.borrarCliente(cliente);
+
+
+
+
+
     }
 
 

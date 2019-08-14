@@ -6,25 +6,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-
-
-
+import com.chila.tallermecanico.Firestore.Database;
 import com.chila.tallermecanico.R;
 import com.chila.tallermecanico.model.Cliente;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 
-import static android.content.ContentValues.TAG;
+
+
 
 public class NuevoCliente extends AppCompatActivity {
 
@@ -34,8 +30,6 @@ public class NuevoCliente extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevo_cliente);
-
-
     }
 
     @Override
@@ -56,9 +50,7 @@ public class NuevoCliente extends AppCompatActivity {
         return true;
     }
 
-
-    private void guardarContacto() {
-
+    private Cliente crearCliente(){
         TextInputEditText contactoNombre = findViewById(R.id.nuevo_contacto_nombre);
         TextInputEditText contactoApellido = findViewById(R.id.nuevo_contacto_apellido);
         TextInputEditText contactoDni = findViewById(R.id.nuevo_contacto_dni);
@@ -77,24 +69,18 @@ public class NuevoCliente extends AppCompatActivity {
         Cliente cliente = new Cliente(nombre, apellido, dni, telefono, email, direccion);
         cliente.setFoto(R.drawable.ic_persona);
         cliente.setUser(FirebaseAuth.getInstance().getUid()); //le agrego UID para lectura
+        return cliente;
 
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db
-                .collection("clientes")
-                .add(cliente).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
     }
+
+
+
+    private void guardarContacto() {
+
+        Database db = Database.getInstance();
+        db.agregarCliente(crearCliente());
+    }
+
 
 
 }

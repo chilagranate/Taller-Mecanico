@@ -6,7 +6,7 @@ import com.chila.tallermecanico.model.Cliente;
 
 public interface FirestoreCallbackCliente {
 
-    void onCallBack(Cliente cliente);
+    public void onCallBack(Cliente cliente);
 
 
 

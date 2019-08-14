@@ -8,13 +8,17 @@ import androidx.annotation.NonNull;
 import com.chila.tallermecanico.R;
 import com.chila.tallermecanico.model.Cliente;
 
+import com.chila.tallermecanico.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -33,12 +37,16 @@ public class Database {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference dbClientes = db.collection(ConstFirestore.CLIENTES_COLECCION);
+    //REFERENCES
+    private CollectionReference dbClientes = db.collection(ConstFirestore.CLIENTES_COLECCION);
+    private CollectionReference dbUsuarios = db.collection(ConstFirestore.USUARIOS_COLECCION);
 
+    //REFERENCES
 
     private Database() {
 
     }
+
 
     public static Database getInstance() {
         return instance;
@@ -52,7 +60,6 @@ public class Database {
         this.cliente = cliente;
     }
 
-
     public void obtenerCliente(String id, final FirestoreCallbackCliente firestoreCallback) {
         dbClientes.document(id)
                 .get()
@@ -62,6 +69,7 @@ public class Database {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             cliente = document.toObject(Cliente.class);
+                            cliente.setId(document.getId());
                             Log.d(TAG, document.getId() + " =>" + document.getData());
                             firestoreCallback.onCallBack(cliente);
 
@@ -90,8 +98,6 @@ public class Database {
                                 cliente.setId(document.getId());
                                 cliente.setFoto(R.drawable.ic_persona);
                                 clientes.add(cliente);
-
-
                             }
                             firestoreCallbackClientes.onCallBack(clientes);
                         } else {
@@ -100,6 +106,97 @@ public class Database {
                     }
 
                 });
+    }
+
+    public void actualizarCliente(final Cliente cliente) {
+        dbClientes
+                .document(cliente.getId())
+                .set(cliente)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, cliente.getId() + " => updated: " + cliente.toString());
+                        } else {
+                            Log.w(TAG, "Error getting document.");
+                        }
+                    }
+                });
+    }
+
+    public void borrarCliente(final Cliente cliente) {
+        dbClientes
+                .document(cliente.getId())
+                .delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, cliente.getId() + "=> Cliente eliminado con exito. " + cliente.toString());
+                        } else {
+                            Log.w(TAG, "Error borrando cliente. " + cliente.getId());
+                        }
+                    }
+                });
+    }
+
+    public void agregarCliente(final Cliente cliente) {
+        dbClientes
+                .add(cliente)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Cliente creado con exioto. " + cliente.toString());
+                        } else {
+                            Log.w(TAG, "Error al agregar cliente. ");
+                        }
+                    }
+                });
+    }
+
+    public void crearUsuario(final Usuario user) {
+        dbUsuarios
+                .add(user)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        Log.d(TAG, "Usuario creado con exito.");
+                    }
+                })
+
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error creando usuario", e);
+                    }
+                });
+
+    }
+
+    public void obtenerUsuario() {
+
+        dbUsuarios
+                .whereEqualTo("uid", user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Usuario usuario = Usuario.getInstance();
+                                usuario=document.toObject(Usuario.class);
+                                Log.d(TAG, "usuario obtenido correctamente");
+                            }
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    }
+                });
+
+
+
+
     }
 
 

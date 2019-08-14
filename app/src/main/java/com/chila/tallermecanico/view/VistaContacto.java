@@ -1,6 +1,7 @@
 package com.chila.tallermecanico.view;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
@@ -17,6 +18,7 @@ import com.chila.tallermecanico.presenter.VistaContactoPresenter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -52,6 +54,12 @@ public class VistaContacto extends AppCompatActivity implements IVistaContacto{
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        presentador.obtenerCliente();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_vista_cliente, menu);
         return super.onCreateOptionsMenu(menu);
@@ -81,8 +89,28 @@ public class VistaContacto extends AppCompatActivity implements IVistaContacto{
                 startActivity(intent);
                 break;
             case R.id.cliente_eliminar:
-                Toast toast2 = Toast.makeText(getApplicationContext(), "eliminar", Toast.LENGTH_SHORT);
-                toast2.show();
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                presentador.eliminarCliente();
+                                finish();
+
+                                //Yes button clicked
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder .setMessage(getString(R.string.alert_dialog_eliminar_cliente))
+                        .setPositiveButton(getString(R.string.alert_dialog_eliminar_cliente_si), dialogClickListener)
+                        .setNegativeButton(getString(R.string.alert_dialog_eliminar_cliente_no), dialogClickListener).show();
                 break;
         }
 

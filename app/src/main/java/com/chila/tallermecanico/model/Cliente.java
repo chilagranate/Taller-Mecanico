@@ -121,45 +121,10 @@ public class Cliente {
         this.direccion = direccion;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
 
-
-    public Cliente (String id){
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        DocumentReference docRef = db.collection("clientes").document(id);
-        docRef
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-
-                            if (document.exists()) {
-                                Cliente cliente = document.toObject(Cliente.class);
-                                nombre = cliente.getNombre();
-                                apellido = cliente.getApellido();
-                                dni = cliente.getDni();
-                                telefono = cliente.getTelefono();
-                                email = cliente.getEmail();
-                                direccion=cliente.getDireccion();
-                                user = cliente.getUser();
-                                setId(document.getId());
-
-
-                                Log.d(TAG, document.getId() + " =>" + document.getData());
-
-                            } else {
-
-                                Log.d(TAG, "No such document");
-                            }
-
-                        }
-
-                    }
-                });
-
+        return "Nombre: " + this.nombre + " " + this.apellido + " DNI: " + this.dni + " Email: " + this.email;
     }
 }

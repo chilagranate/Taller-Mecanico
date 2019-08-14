@@ -3,7 +3,9 @@ package com.chila.tallermecanico.view;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.chila.tallermecanico.Firestore.Database;
 import com.chila.tallermecanico.R;
+import com.chila.tallermecanico.model.Usuario;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -43,12 +45,15 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         currentUser= mAuth.getCurrentUser();
+
         if(currentUser==null){
             Intent intent = new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
-
         }
+        Database db = Database.getInstance();
+        db.obtenerUsuario();
 
+        Usuario usuario=Usuario.getInstance();
 
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);

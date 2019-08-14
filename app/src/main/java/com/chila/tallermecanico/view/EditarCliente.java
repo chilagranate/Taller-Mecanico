@@ -4,10 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.chila.tallermecanico.Firestore.Database;
+import com.chila.tallermecanico.Firestore.FirestoreCallbackCliente;
 import com.chila.tallermecanico.R;
 import com.chila.tallermecanico.model.Cliente;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +28,7 @@ public class EditarCliente extends AppCompatActivity {
     private String idCliente;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private TextView tvNombre, tvApellido, tvTelefono, tvEmail, tvDireccion, tvDni;
+    private Cliente cliente;
 
 
 
@@ -33,38 +39,23 @@ public class EditarCliente extends AppCompatActivity {
         final Bundle parametros = getIntent().getExtras();
         idCliente = parametros.getString("id");
         inicializarView();
-        obtenerCliente(idCliente);
+        obtenerCliente();
     }
 
-    private void obtenerCliente(String id) {
-
-        DocumentReference docRef = db.collection("clientes").document(id);
-        docRef
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Cliente cliente = document.toObject(Cliente.class);
-                                Log.d(TAG, document.getId() + " =>" + document.getData());
-                                cargarCliente(cliente);
-                            } else {
-                                Log.d(TAG, "No such document");
-                            }
-
-                        }
 
 
-
-
-                    }
-                });
+    public void obtenerCliente(){
+        Database db = Database.getInstance();
+        db.obtenerCliente(idCliente, new FirestoreCallbackCliente() {
+            @Override
+            public void onCallBack(Cliente cliente) {
+                mostrarCliente(cliente);
+            }
+        });
     }
 
-    private void cargarCliente(Cliente cliente){
+    private void mostrarCliente(Cliente cliente){
+        this.cliente = cliente;
         tvNombre.setText(cliente.getNombre());
         tvApellido.setText(cliente.getApellido());
         tvTelefono.setText(cliente.getTelefono());
@@ -83,6 +74,38 @@ public class EditarCliente extends AppCompatActivity {
         tvEmail     = findViewById(R.id.edit_contacto_email);
         tvTelefono  = findViewById(R.id.edit_contacto_telefono);
 
+    }
+
+    public void guardarCliente(){
+        cliente.setNombre(tvNombre.getText().toString());
+        cliente.setApellido(tvApellido.getText().toString());
+        cliente.setDireccion(tvDireccion.getText().toString());
+        cliente.setDni(tvDni.getText().toString());
+        cliente.setEmail(tvEmail.getText().toString());
+        cliente.setTelefono(tvTelefono.getText().toString());
+        Database db = Database.getInstance();
+        db.actualizarCliente(cliente);
+        finish();
+
+    }
+
+
+    //OPCIONES DEL MENU
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_editar_cliente, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.editar_contacto:
+                guardarCliente();
+                finish();
+                break;
+
+        }
+        return true;
     }
 
 
