@@ -1,7 +1,12 @@
 package com.chila.tallermecanico.Firestore;
 
 
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 
@@ -23,8 +28,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +45,12 @@ import static android.content.ContentValues.TAG;
 
 public class Database {
     private static final Database instance = new Database();
+
+
     private Cliente cliente = new Cliente();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     //REFERENCES
     private CollectionReference dbClientes = db.collection(ConstFirestore.CLIENTES_COLECCION);
     private CollectionReference dbUsuarios = db.collection(ConstFirestore.USUARIOS_COLECCION);
@@ -198,6 +212,63 @@ public class Database {
 
 
     }
+
+    public void subirFotoCliente(final Cliente cliente, Uri uri, StorageReference imageRef){
+        imageRef.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> downloadUrl=taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                        downloadUrl.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                cliente.setFotoUrl(uri.toString());
+                                actualizarCliente(cliente);
+                            }
+                        });
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //ERROR AL SUBIR
+
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress  = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+
+                    }
+                });
+    }
+
+    public void obtenerFotoCliente() throws IOException {
+
+        File localFile = File.createTempFile("images", "jpg");
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference riversRef = storageRef.child("images/rivers.jpg");
+        riversRef.getFile(localFile)
+                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        // Successfully downloaded data to local file
+                        // ...
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle failed download
+                // ...
+            }
+        });
+
+    }
+
+
 
 
 }

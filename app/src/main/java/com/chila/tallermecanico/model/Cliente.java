@@ -1,5 +1,6 @@
 package com.chila.tallermecanico.model;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -26,12 +27,19 @@ public class Cliente {
     private String telefono;
     private String email;
     private String direccion;
+    private String fotoUrl;
     private int foto;
 
 
+    public String getFotoUrl() {
+        return fotoUrl;
+    }
 
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
+    }
 
-//constructors
+    //constructors
     public Cliente (){
 
     }

@@ -1,6 +1,7 @@
 package com.chila.tallermecanico.view;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -16,15 +17,24 @@ import com.chila.tallermecanico.model.Cliente;
 
 import com.chila.tallermecanico.presenter.VistaContactoPresenter;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 
+
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,12 +42,17 @@ import android.widget.Toast;
 
 
 public class VistaContacto extends AppCompatActivity implements IVistaContacto{
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     private String idCliente;
     private ProgressBar progressBar;
     private TextView tvNombre, tvTelefono, tvEmail, tvDireccion, tvDni;
     private CircularImageView foto;
     private VistaContactoPresenter presentador;
+    private Uri mImageUri;
+    private  StorageReference mStorageRef;
+
+
 
 
     @Override
@@ -46,10 +61,39 @@ public class VistaContacto extends AppCompatActivity implements IVistaContacto{
         setContentView(R.layout.activity_vista_contacto);
         referenciarView();
 
+
         final Bundle parametros = getIntent().getExtras(); //Recupero el id de cliente
         if (parametros != null) {
             idCliente = parametros.getString("id");
-            presentador = new VistaContactoPresenter(this,idCliente);
+            presentador = new VistaContactoPresenter(this,idCliente, this.getApplicationContext());
+        }
+
+        foto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirSelectorImagen();
+            }
+        });
+    }
+
+    protected void abrirSelectorImagen(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+            && data != null && data.getData() != null){
+            mImageUri = data.getData();
+            Picasso.with(this).load(mImageUri).into(foto);
+            subirFoto(mImageUri);
+
         }
     }
 
@@ -72,7 +116,7 @@ public class VistaContacto extends AppCompatActivity implements IVistaContacto{
         tvEmail.setText(cliente.getEmail());
         tvDni.setText(cliente.getDni());
         tvDireccion.setText(cliente.getDireccion());
-        foto.setImageResource(cliente.getFoto());
+        Picasso.with(this).load(Uri.parse(cliente.getFotoUrl())).into(foto);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -128,5 +172,23 @@ public class VistaContacto extends AppCompatActivity implements IVistaContacto{
         foto = findViewById(R.id.vista_contacto_foto);
     }
 
+
+    private String getFileExtension (Uri uri){
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime  = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+
+    public void subirFoto(Uri mImageUri){
+        if (mImageUri != null){
+            mStorageRef = FirebaseStorage.getInstance().getReference();
+            StorageReference imageRef = mStorageRef.child("/imgClientes/" + System.currentTimeMillis() + "." + getFileExtension(mImageUri));
+            presentador.subirFotoCliente(mImageUri, imageRef);
+        }else{
+            Toast.makeText(this, "No selecciono foto",Toast.LENGTH_LONG).show();
+        }
+
+    }
 
 }

@@ -2,6 +2,7 @@ package com.chila.tallermecanico.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.chila.tallermecanico.model.Cliente;
 import com.chila.tallermecanico.view.ListaContactos;
 import com.chila.tallermecanico.view.NuevoCliente;
 import com.chila.tallermecanico.view.VistaContacto;
+import com.squareup.picasso.Picasso;
 
 
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ public class ClienteAdaptador extends RecyclerView.Adapter<ClienteAdaptador.Clie
     public void onBindViewHolder(@NonNull ClienteAdaptador.ClienteViewHolder holder, int position) {
         final Cliente cliente=clientes.get(position);
         holder.tvCliente.setText(cliente.getNombre() + " " + cliente.getApellido());
-        holder.imgCliente.setImageResource(cliente.getFoto());
+        Picasso.with(activity).load(Uri.parse(cliente.getFotoUrl())).into(holder.imgCliente);
 
         holder.cardViewCliente.setOnClickListener(new View.OnClickListener() {
             @Override
