@@ -2,8 +2,11 @@ package com.chila.tallermecanico.presenter;
 
 import android.net.Uri;
 
+import com.chila.tallermecanico.model.Auto;
 import com.chila.tallermecanico.model.Cliente;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.List;
 
 public interface IVistaContactoPresenter {
 
@@ -13,8 +16,11 @@ public interface IVistaContactoPresenter {
 
     void eliminarCliente();
 
-    void subirFotoCliente(Uri uri, StorageReference imageRef);
+    void subirFotoCliente(byte[] data);
+
+    void obtenerAutosCliente();
+
+    void mostrarAutos(List<Auto> autos);
 
 
-
-    }
+}

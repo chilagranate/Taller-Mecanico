@@ -2,8 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
-    xmlns:card_view="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardview_contacto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -39,8 +38,6 @@
             android:layout_marginLeft="75dp"
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
-
-
             tools:hint="prueba de asd" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

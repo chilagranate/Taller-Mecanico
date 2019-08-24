@@ -68,7 +68,7 @@ public class NuevoCliente extends AppCompatActivity {
 
         Cliente cliente = new Cliente(nombre, apellido, dni, telefono, email, direccion);
         cliente.setFoto(R.drawable.ic_persona);
-        cliente.setUser(FirebaseAuth.getInstance().getUid()); //le agrego UID para lectura
+
         return cliente;
 
     }

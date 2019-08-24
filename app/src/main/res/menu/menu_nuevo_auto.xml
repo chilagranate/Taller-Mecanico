@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.chila.tallermecanico.model.NuevoAutoActivity">
+    <item
+        android:id="@+id/menu_nuevo_auto_guardar"
+        android:orderInCategory="100"
+        android:title="@string/nuevo_auto_menu_agregar_auto"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_add"
+        />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="101"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+
+</menu>

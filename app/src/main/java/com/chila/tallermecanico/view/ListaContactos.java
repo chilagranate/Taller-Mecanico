@@ -60,8 +60,7 @@ public class ListaContactos extends AppCompatActivity implements IListaContactos
     }
 
     public ClienteAdaptador crearAdaptador(List<Cliente> clientes){
-        ClienteAdaptador adaptador = new ClienteAdaptador(clientes, this);
-        return adaptador;
+        return new ClienteAdaptador(clientes, this);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

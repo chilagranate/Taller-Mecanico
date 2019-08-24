@@ -13,13 +13,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.EditarCliente"
+        <activity android:name=".view.NuevaOrdenTrabajo"></activity>
+        <activity android:name=".view.VistaAutoActivity" />
+        <activity android:name=".view.NuevoAutoActivity" />
+        <activity
+            android:name=".view.EditarCliente"
             android:parentActivityName=".view.ListaContactos">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.ListaContactos" />
-
         </activity>
         <activity
             android:name=".view.LoginActivity"
@@ -27,11 +29,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.VistaContacto"
+            android:name=".view.VistaCliente"
             android:parentActivityName=".view.ListaContactos">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

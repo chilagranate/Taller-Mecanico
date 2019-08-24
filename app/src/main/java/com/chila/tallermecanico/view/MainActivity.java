@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import com.chila.tallermecanico.Firestore.Database;
 import com.chila.tallermecanico.R;
+import com.chila.tallermecanico.model.Auto;
+import com.chila.tallermecanico.model.Cliente;
 import com.chila.tallermecanico.model.Usuario;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -33,9 +35,6 @@ import android.widget.Switch;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
-
-
 
 
     @Override
@@ -44,26 +43,29 @@ public class MainActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        currentUser= mAuth.getCurrentUser();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(currentUser==null){
+        if(currentUser ==null){
             Intent intent = new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
         }
         Database db = Database.getInstance();
         db.obtenerUsuario();
-
         Usuario usuario=Usuario.getInstance();
+        //agregarAutos();
 
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Nueva orden de trabajo", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
+
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -100,10 +102,8 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         switch (id) {
             case 0:
-
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -134,6 +134,8 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 
 
 }

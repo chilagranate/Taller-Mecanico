@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,26 +15,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chila.tallermecanico.R;
 import com.chila.tallermecanico.model.Cliente;
-import com.chila.tallermecanico.view.ListaContactos;
-import com.chila.tallermecanico.view.NuevoCliente;
-import com.chila.tallermecanico.view.VistaContacto;
+import com.chila.tallermecanico.view.VistaCliente;
 import com.squareup.picasso.Picasso;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteAdaptador extends RecyclerView.Adapter<ClienteAdaptador.ClienteViewHolder> {
 
-    List<Cliente> clientes;
-    Activity activity;
+    private List<Cliente> clientes;
+    private Activity activity;
 
     public ClienteAdaptador(List<Cliente> clientes, Activity activity) {
         this.clientes = clientes;
         this.activity = activity;
 
     }
-
 
 
     @NonNull
@@ -47,15 +42,15 @@ public class ClienteAdaptador extends RecyclerView.Adapter<ClienteAdaptador.Clie
 
     @Override
     public void onBindViewHolder(@NonNull ClienteAdaptador.ClienteViewHolder holder, int position) {
-        final Cliente cliente=clientes.get(position);
+        final Cliente cliente = clientes.get(position);
         holder.tvCliente.setText(cliente.getNombre() + " " + cliente.getApellido());
-        Picasso.with(activity).load(Uri.parse(cliente.getFotoUrl())).into(holder.imgCliente);
-
+        if (cliente.getFotoUrl() != null)
+            Picasso.with(activity).load(Uri.parse(cliente.getFotoUrl())).into(holder.imgCliente);
         holder.cardViewCliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), VistaContacto.class);
-                intent.putExtra("id",cliente.getId());
+                Intent intent = new Intent(v.getContext(), VistaCliente.class);
+                intent.putExtra("id", cliente.getId());
                 v.getContext().startActivity(intent);
 
 
@@ -63,7 +58,6 @@ public class ClienteAdaptador extends RecyclerView.Adapter<ClienteAdaptador.Clie
         });
 
     }
-
 
 
     @Override
@@ -79,7 +73,7 @@ public class ClienteAdaptador extends RecyclerView.Adapter<ClienteAdaptador.Clie
         private CardView cardViewCliente;
 
 
-        public ClienteViewHolder(View itemView) {
+        private ClienteViewHolder(View itemView) {
             super(itemView);
             imgCliente = itemView.findViewById(R.id.cardview_cliente_foto);
             tvCliente = itemView.findViewById(R.id.cardview_cliente_nombre);
