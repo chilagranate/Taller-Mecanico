@@ -28,7 +28,6 @@
             android:visibility="visible"
             app:civ_border_color="#EEEEEE"
             app:civ_shadow_radius="10"
-
              />
 
         <TextView

@@ -94,54 +94,43 @@ public class Database {
                             }
                         } else {
                             Log.d(TAG, "No such document");
-
                         }
                     }
                 });
 
     }
 
-    public void obtenerClientes(final FirestoreCallbackClientes firestoreCallbackClientes) {
+    public void getClientes(final FirestoreCallbackClientes firestoreCallbackClientes) {
+        dbClientes.whereEqualTo("user", user.getUid()).get().addOnCompleteListener(task -> {
 
-        dbClientes
-                .whereEqualTo("user", user.getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if (task.getResult() != null) {
-                                List<Cliente> clientes = new ArrayList<>();
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d(TAG, document.getId() + " =>" + document.getData());
-                                    Cliente cliente = document.toObject(Cliente.class);
-                                    cliente.setId(document.getId());
-                                    clientes.add(cliente);
-                                }
-                                firestoreCallbackClientes.onCallBack(clientes);
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
+            if (!task.isSuccessful()) {
+                Log.w(TAG, "Error getting documents.", task.getException());
+                return;
+            }
 
-                });
+            if (task.getResult() == null)
+                return;
+
+            List<Cliente> clientes = new ArrayList<>();
+            for (QueryDocumentSnapshot document : task.getResult()) {
+                Log.d(TAG, document.getId() + " =>" + document.getData());
+                Cliente cliente = document.toObject(Cliente.class);
+                cliente.setId(document.getId());
+                clientes.add(cliente);
+            }
+
+            firestoreCallbackClientes.onCallBack(clientes);
+        });
     }
 
     public void actualizarCliente(final Cliente cliente) {
-        dbClientes
-                .document(cliente.getId())
-                .set(cliente)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, cliente.getId() + " => updated: " + cliente.toString());
-                        } else {
-                            Log.w(TAG, "Error actualizando cliente.");
-                        }
-                    }
-                });
+        dbClientes.document(cliente.getId()).set(cliente).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, cliente.getId() + " => updated: " + cliente.toString());
+            } else {
+                Log.w(TAG, "Error actualizando cliente.");
+            }
+        });
     }
 
     public void borrarCliente(final Cliente cliente) {

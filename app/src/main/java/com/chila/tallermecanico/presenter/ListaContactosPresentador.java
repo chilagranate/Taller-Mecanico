@@ -20,7 +20,7 @@ public class ListaContactosPresentador implements IListaContactosPresentador{
 
     public void obtenerClientes() {
         Database db = Database.getInstance();
-        db.obtenerClientes(new FirestoreCallbackClientes() {
+        db.getClientes(new FirestoreCallbackClientes() {
             @Override
             public void onCallBack(List<Cliente> listaClientes) {
                 mostrarClientes(listaClientes);
