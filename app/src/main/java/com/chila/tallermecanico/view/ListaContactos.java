@@ -3,6 +3,8 @@ package com.chila.tallermecanico.view;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,44 +24,45 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 public class ListaContactos extends AppCompatActivity implements IListaContactos {
-    private RecyclerView RvClientes;
+
     private IListaContactosPresentador presentador;
 
     private ProgressBar progressBar;
-    private FloatingActionButton fab;
+
+    @BindView(R.id.contactos_recyclerview)
+    RecyclerView RvClientes;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_contactos);
+        ButterKnife.bind(this);
 
 
         //RvClientes.setHasFixedSize(true);
         RvClientes = findViewById(R.id.contactos_recyclerview);
         progressBar = findViewById(R.id.progressbar);
 
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), NuevoCliente.class);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(view.getContext(), NuevoCliente.class);
+            startActivity(intent);
         });
 
         presentador = new ListaContactosPresentador(this);
 
     }
 
-    public void inicializarAdaptador(ClienteAdaptador adaptador){
+    public void inicializarAdaptador(ClienteAdaptador adaptador) {
         RvClientes.setAdapter(adaptador);
     }
 
-    public void generarLayout(){
+    public void generarLayout() {
         RvClientes.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public ClienteAdaptador crearAdaptador(List<Cliente> clientes){
+    public ClienteAdaptador crearAdaptador(List<Cliente> clientes) {
         return new ClienteAdaptador(clientes, this);
     }
 
@@ -100,8 +103,6 @@ public class ListaContactos extends AppCompatActivity implements IListaContactos
         super.onResume();
         presentador.obtenerClientes();
     }
-
-
 
 
 }

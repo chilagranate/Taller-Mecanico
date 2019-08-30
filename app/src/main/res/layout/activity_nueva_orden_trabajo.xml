@@ -1,9 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.NuevaOrdenTrabajo">
+    android:orientation="vertical"
+    tools:context=".view.NuevaOrdenTrabajoActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <AutoCompleteTextView
+        android:id="@+id/orden_trabajo_clientes_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:hint="Ej. Roberto"
+        android:imeOptions="actionSearch"
+        android:inputType="textAutoComplete"
+        android:padding="15dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/orden_trabajo_selected_cliente_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="17dp"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/orden_trabajo_selected_cliente_foto"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:visibility="visible"
+                app:civ_border_color="#EEEEEE"
+                app:civ_shadow_radius="10"
+                android:padding="8dp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp">
+
+                <TextView
+                    android:id="@+id/orden_trabajo_selected_cliente"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Apellido, nombre" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/orden_trabajo_clientes_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close"
+                android:padding="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

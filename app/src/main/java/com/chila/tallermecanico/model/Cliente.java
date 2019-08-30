@@ -129,10 +129,13 @@ public class Cliente {
         this.direccion = direccion;
     }
 
+    public String getDetails() {
+        return "Nombre: " + this.nombre + " " + this.apellido + " DNI: " + this.dni + " Email: " + this.email;
+    }
+
     @NonNull
     @Override
     public String toString() {
-
-        return "Nombre: " + this.nombre + " " + this.apellido + " DNI: " + this.dni + " Email: " + this.email;
+        return apellido + ", " + nombre;
     }
 }
