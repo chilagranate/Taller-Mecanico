@@ -33,12 +33,7 @@ public class OrdenServicioPresupuestoFragment extends Fragment {
         View view = inflater.inflate(R.layout.orden_servicio_presupuesto_fragment,container,false);
         mViewModel = ViewModelProviders.of(getActivity()).get(OrdenServicioViewModel.class);
 
-
-
         iniciarViews(view);
-
-
-
         return view;
 
     }

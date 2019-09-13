@@ -17,12 +17,9 @@ public class OrdenServicioViewModel extends ViewModel {
 
         Database db = Database.getInstance();
         db.obtenerOrdenServicio(id, this::setOrdenServicio);
-
-
     }
 
     private void setOrdenServicio(OrdenServicio ordenServicio) {
-
         this.ordenServicio.postValue(ordenServicio);
     }
 

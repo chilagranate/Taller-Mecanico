@@ -20,9 +20,6 @@ public class VistaAutoViewModel extends ViewModel {
     public void init(String patente){
         Database db = Database.getInstance();
         db.obtenerAutoPatente(patente, this::setAuto);
-
-
-
     }
 
     private void setAuto(Auto auto){

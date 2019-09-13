@@ -28,7 +28,6 @@ public class VistaAutoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_auto);
         ButterKnife.bind(this);
-
         final Bundle parametros = getIntent().getExtras();
         if (parametros != null) {
             String patente = parametros.getString("patente");
@@ -40,8 +39,6 @@ public class VistaAutoActivity extends AppCompatActivity {
     }
 
     private void mostrarAuto(Auto auto) {
-        if(auto==null)
-            return;
 
         patenteTV.setText(auto.getPatente());
         modeloTV.setText(auto.getModelo());

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.NuevaReparacionActivity">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/nuevo_presupuesto_nueva_reparacion_cardview"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/nombre_de_la_reparacion"
+                android:textColorHint="@color/colorAccent">
+
+                <EditText
+                    android:id="@+id/reparacion_nombre_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/descripcion"
+                android:textColorHint="@color/colorAccent">
+
+                <EditText
+                    android:id="@+id/nueva_reparacion_descripcion_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/nueva_reparacion_nuevo_repuesto_bt"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="Nuevo Repuesto"/>
+
+            <Button
+                android:id="@+id/nuevo_presupuesto_nueva_mano_obra_bt"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="Nueva mano de obra"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/nueva_reparacion_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <Button
+        android:id="@+id/nueva_reparacion_guardar_reparacion_bt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar Reparacion"
+        android:layout_gravity="end"
+        />
+</LinearLayout>

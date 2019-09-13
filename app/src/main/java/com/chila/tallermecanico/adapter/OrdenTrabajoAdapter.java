@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chila.tallermecanico.R;
 import com.chila.tallermecanico.model.OrdenServicio;
-import com.chila.tallermecanico.view.VistaOrdenTrabajoActivity;
+import com.chila.tallermecanico.view.VistaOrdenServicioActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -43,7 +43,7 @@ public class OrdenTrabajoAdapter extends RecyclerView.Adapter<OrdenTrabajoAdapte
         String fecha = format.format(ordenServicio.getFechaEntrada());
         holder.tvFechaEntrada.setText(fecha);
         holder.cardview.setOnClickListener(v -> {
-            Intent intent = new Intent (v.getContext(), VistaOrdenTrabajoActivity.class);
+            Intent intent = new Intent (v.getContext(), VistaOrdenServicioActivity.class);
             intent.putExtra("id", ordenServicio.getId());
             v.getContext().startActivity(intent);
 

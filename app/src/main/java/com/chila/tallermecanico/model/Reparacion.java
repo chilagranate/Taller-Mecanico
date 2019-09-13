@@ -1,12 +1,17 @@
 package com.chila.tallermecanico.model;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Parcel
 public class Reparacion {
 
     String nombreReparacion;
     String descripcion;
+    double precioReparacion;
+    boolean aceptada;
     List<Repuesto> repuestos;
     List<ManoDeObra> manoDeObra;
     List<String> fotos;
@@ -23,6 +28,15 @@ public class Reparacion {
 
     public void setNombreReparacion(String nombreReparacion) {
         this.nombreReparacion = nombreReparacion;
+    }
+
+    public void addRepuesto(Repuesto repuesto){
+        repuestos.add(repuesto);
+
+    }
+
+    public void addManoDeObra(ManoDeObra manoDeObra){
+        this.manoDeObra.add(manoDeObra);
     }
 
     public String getDescripcion() {

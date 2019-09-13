@@ -50,6 +50,10 @@ public class Cliente {
 
 //GETTERS AND SETTERS
 
+    public String getNombreCompleto(){
+        return apellido + ", " + nombre;
+    }
+
     public int getFoto() {
         return foto;
     }

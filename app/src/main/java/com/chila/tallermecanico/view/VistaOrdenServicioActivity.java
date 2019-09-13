@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class VistaOrdenTrabajoActivity extends AppCompatActivity implements IVistaOrdenTrabajoActivity {
+public class VistaOrdenServicioActivity extends AppCompatActivity implements IVistaOrdenTrabajoActivity {
     private IVistaOrdenServicioPresentador presenter;
 
     @BindView(R.id.vista_orden_trabajo_cliente_tv)

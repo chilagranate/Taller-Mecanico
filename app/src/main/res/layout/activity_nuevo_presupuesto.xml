@@ -8,17 +8,12 @@
     android:layout_height="match_parent"
     tools:context=".view.NuevoPresupuestoActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/nuevo_presupuesto_nueva_reparacion_bt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="@string/nueva_reparaci_n"
-            app:layout_constraintTop_toBottomOf="@+id/cardview_datos_servicio" />
+
 
         <androidx.cardview.widget.CardView
 
@@ -53,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textStyle="bold"
-                    tools:text="Cliente:" />
+                    android:text="Cliente:" />
 
                 <TextView
                     android:id="@+id/nuevo_presupuesto_cliente_tv"
@@ -66,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textStyle="bold"
-                    tools:text="Vehículo:" />
+                    android:text="Vehículo:" />
 
                 <TextView
                     android:id="@+id/nuevo_presupuesto_vehiculo_tv"
@@ -79,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textStyle="bold"
-                    tools:text="Patente:" />
+                    android:text="Patente:" />
 
                 <TextView
                     android:id="@+id/nuevo_presupuesto_patente_tv"
@@ -89,140 +84,18 @@
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/nuevo_presupuesto_nueva_reparacion_cardview"
+        <Button
+            android:id="@+id/nuevo_presupuesto_nueva_reparacion_bt"
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nuevo_presupuesto_nueva_reparacion_bt">
+            android:hint="@string/nueva_reparaci_n"
+            app:layout_constraintTop_toBottomOf="@+id/cardview_datos_servicio" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/nombre_de_la_reparacion"
-                    android:textColorHint="@color/colorAccent">
-
-                    <EditText
-                        android:id="@+id/nuevo_presupuesto_nueva_reparacion_nombre"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/descripcion"
-                    android:textColorHint="@color/colorAccent">
-
-                    <EditText
-                        android:id="@+id/nuevo_presupuesto_nueva_reparacion_descripcion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:id="@+id/nuevo_presupuesto_nuevo_repuesto_bt"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:hint="Nuevo Repuesto"/>
-
-                <Button
-                    android:id="@+id/nuevo_presupuesto_nueva_mano_obra_bt"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:hint="Nueva mano de obra"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 
-                <LinearLayout
-
-                    android:id="@+id/nuevo_presupuesto_nuevo_repuesto_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:text="@string/nuevo_repuesto"/>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/repuesto"
-                        android:textColorHint="@color/colorAccent">
-
-                        <EditText
-                            android:id="@+id/nuevo_presupuesto_nueva_reparacion_pieza"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                             />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/precio_unitario"
-                            android:layout_weight="1"
-                            android:textColorHint="@color/colorAccent">
-
-                            <EditText
-                                android:id="@+id/nuevo_presupuesto_nueva_pieza_precio"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-
-                            android:hint="@string/cantidad"
-                            android:textColorHint="@color/colorAccent">
-
-                            <EditText
-                                android:id="@+id/nuevo_presupuesto_nueva_pieza_cantidad"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/nuevo_repuesto_nueva_pieza_bt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/agregar_repuesto"/>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </ScrollView>

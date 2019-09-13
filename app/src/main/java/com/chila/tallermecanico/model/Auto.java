@@ -22,6 +22,10 @@ public class Auto {
     public String toString(){
         return patente + ": " + marca + " " + modelo;
     }
+
+    public String getModeloCompleto(){
+        return marca + " " + modelo;
+    }
     public String getId() {
         return id;
     }

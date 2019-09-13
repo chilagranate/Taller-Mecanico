@@ -2,7 +2,6 @@ package com.chila.tallermecanico.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chila.tallermecanico.R;
 import com.chila.tallermecanico.model.Auto;
 import com.chila.tallermecanico.view.VistaAutoActivity;
-import com.chila.tallermecanico.view.VistaOrdenTrabajoActivity;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.List;

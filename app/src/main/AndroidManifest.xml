@@ -9,8 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.NuevoPresupuestoActivity"></activity>
-        <activity android:name=".view.VistaOrdenTrabajoActivity" />
+
+        <activity android:name=".view.NuevoRepuestoActivity"
+            android:theme="@style/Theme.Transparent"/>
+
+        <activity android:name=".view.NuevaReparacionActivity" />
+        <activity android:name=".view.NuevoPresupuestoActivity" />
+        <activity android:name=".view.VistaOrdenServicioActivity" />
         <activity
             android:name=".view.NuevaOrdenTrabajoActivity"
             android:parentActivityName=".view.MainActivity" />
@@ -63,9 +68,9 @@
                 android:value=".view.ListaContactos" />
         </activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

@@ -1,5 +1,8 @@
 package com.chila.tallermecanico.model;
 
+import org.parceler.Parcel;
+
+@Parcel
 public class Repuesto{
 
     private String descripcion;
