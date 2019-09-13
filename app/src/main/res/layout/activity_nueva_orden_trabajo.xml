@@ -1,28 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_margin="10dp"
     tools:context=".view.NuevaOrdenTrabajoActivity">
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <AutoCompleteTextView
-        android:id="@+id/orden_trabajo_clientes_et"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:hint="Ej. Roberto"
-        android:imeOptions="actionSearch"
-        android:inputType="textAutoComplete"
-        android:padding="15dp" />
+        >
 
+        <AutoCompleteTextView
+            android:id="@+id/orden_trabajo_clientes_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cliente"
+            android:layout_weight="1"
+            android:imeOptions="actionSearch"
+            android:inputType="textAutoComplete"
+            android:padding="10dp" />
+        <Button
+            android:id="@+id/orden_trabajo_nuevo_cliente_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nuevo"
+            android:layout_weight="4"/>
+    </LinearLayout>
     <androidx.cardview.widget.CardView
         android:id="@+id/orden_trabajo_selected_cliente_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="17dp"
+        android:layout_marginBottom="10dp"
+
+        android:visibility="visible"
         card_view:cardCornerRadius="6dp"
         card_view:cardElevation="6dp">
 
@@ -30,25 +48,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/orden_trabajo_selected_cliente_foto"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
+                android:padding="8dp"
                 android:visibility="visible"
                 app:civ_border_color="#EEEEEE"
-                app:civ_shadow_radius="10"
-                android:padding="8dp"/>
+                app:civ_shadow_radius="10" />
+
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="6dp"
                 android:layout_marginTop="6dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="6dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="5dp">
+                android:orientation="vertical"
+                android:padding="6dp">
 
                 <TextView
                     android:id="@+id/orden_trabajo_selected_cliente"
@@ -56,18 +74,223 @@
                     android:layout_height="wrap_content"
                     tools:text="Apellido, nombre" />
 
-            </LinearLayout>
 
+            </LinearLayout>
             <ImageView
                 android:id="@+id/orden_trabajo_clientes_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_close"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="TODO"
                 android:padding="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
+                android:src="@drawable/ic_close" />
+
+
 
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        >
+
+        <AutoCompleteTextView
+            android:id="@+id/orden_trabajo_auto_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Auto"
+            android:imeOptions="actionSearch"
+            android:inputType="textAutoComplete"
+            android:padding="10dp"/>
+
+        <Button
+            android:id="@+id/orden_trabajo_nuevo_auto_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:hint="@string/nuevo"/>
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/orden_trabajo_selected_car_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:visibility="visible"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/orden_trabajo_selected_car_foto"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:padding="8dp"
+                android:visibility="visible"
+                app:civ_border_color="#EEEEEE"
+                app:civ_shadow_radius="10" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="6dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="6dp">
+
+                <TextView
+                    android:id="@+id/orden_trabajo_selected_car"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Chevrolet cruze" />
+
+                <TextView
+                    android:id="@+id/orden_trabajo_selected_car_patente"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="AC809BG" />
+
+
+            </LinearLayout>
+
+
+
+            <ImageView
+                android:id="@+id/orden_trabajo_car_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="TODO"
+                android:padding="8dp"
+                android:src="@drawable/ic_close" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Fecha"
+        android:textSize="20sp"
+        android:textColorHint="@color/colorAccent"
+        />
+
+    <EditText
+        android:id="@+id/orden_trabajo_fecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:drawableRight="@drawable/ic_arrow_drop_down"
+        android:inputType="date"
+        android:focusable="false"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Inventario del automovil"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
+        android:textColorHint="@color/colorAccent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/nueva_orden_trabajo_kilometraje_layout"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nueva_orden_trabajo_kilometraje"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nueva_orden_trabajo_kilometraje"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:singleLine="true"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/nueva_orden_trabajo_kilometraje_titulo_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/kilometraje"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="18sp"
+        android:visibility="gone"/>
+
+    <CheckBox
+        android:id="@+id/nueva_orden_trabajo_kilometraje_cb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/sin_tablero"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nueva_orden_trabajo_gasolina"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="18sp"/>
+    <SeekBar
+        android:id="@+id/nueva_orden_trabajo_gasolina_sb"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:max="4"/>
+
+        <TextView
+            android:id="@+id/nueva_orden_trabajo_gasolina_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:hint="1/2 tanque"
+            android:textSize="18sp"
+            android:gravity="center"/>
+
+            <CheckBox
+            android:id="@+id/nueva_orden_trabajo_gasolina_cb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nueva_orden_trabajo_checkbox_medidor_nafta"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/falla_que_declara_el_cliente"
+            android:textColorHint="@color/colorAccent"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nueva_orden_trabajo_falla_cliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionNext"
+                android:inputType="textMultiLine|textCapSentences"
+
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
+</ScrollView>

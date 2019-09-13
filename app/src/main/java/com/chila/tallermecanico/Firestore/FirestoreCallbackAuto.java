@@ -7,4 +7,6 @@ import java.util.List;
 public interface FirestoreCallbackAuto {
 
     void onCallBack(List<Auto> autos);
+
+
 }

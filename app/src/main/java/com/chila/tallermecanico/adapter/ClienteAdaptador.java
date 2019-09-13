@@ -52,11 +52,8 @@ public class ClienteAdaptador extends RecyclerView.Adapter<ClienteAdaptador.Clie
                 Intent intent = new Intent(v.getContext(), VistaCliente.class);
                 intent.putExtra("id", cliente.getId());
                 v.getContext().startActivity(intent);
-
-
             }
         });
-
     }
 
 

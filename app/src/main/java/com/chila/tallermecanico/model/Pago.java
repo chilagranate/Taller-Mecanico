@@ -7,6 +7,6 @@ public class Pago {
     private Date fecha;
     private Cliente cliente;
     private double monto;
-    private OrdenTrabajo ordenTrabajo;
+    private OrdenServicio ordenServicio;
 
 }

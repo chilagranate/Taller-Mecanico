@@ -145,6 +145,22 @@
     <string name="nuevo_auto_vin">VIN</string>
     <string name="kilometraje">Kilometraje</string>
     <string name="nuevo_auto_menu_agregar_auto">Agregar auto</string>
+    <string name="nuevo">Nuevo</string>
+    <string name="cliente">Cliente</string>
+    <string name="nueva_orden_trabajo_kilometraje">Kilometraje</string>
+    <string name="nueva_orden_trabajo_gasolina">Gasolina</string>
+    <string name="nueva_orden_trabajo_checkbox_medidor_nafta">No funciona medidor</string>
+    <string name="sin_tablero">Sin tablero</string>
+    <string name="falla_que_declara_el_cliente">Falla que declara el cliente</string>
+    <string name="fecha_de_ingreso">Fecha de ingreso</string>
+    <string name="precio_unitario">Precio unitario</string>
+    <string name="nuevo_repuesto">Nuevo repuesto</string>
+    <string name="descripcion">Descripcion</string>
+    <string name="nombre_de_la_reparacion">Nombre de la reparacion</string>
+    <string name="nueva_reparaci_n">Nueva reparación</string>
+    <string name="repuesto">Repuesto</string>
+    <string name="cantidad">Cantidad</string>
+    <string name="agregar_repuesto">Agregar repuesto</string>
 
     <string-array name="tipo_nuevo_auto">
         <item>Auto</item>

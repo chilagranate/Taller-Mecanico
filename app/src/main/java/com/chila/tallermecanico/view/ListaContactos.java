@@ -67,12 +67,10 @@ public class ListaContactos extends AppCompatActivity implements IListaContactos
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+
         switch (id) {
             case R.id.clientes_actualizar:
                 presentador.obtenerClientes();
@@ -98,11 +96,7 @@ public class ListaContactos extends AppCompatActivity implements IListaContactos
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        presentador.obtenerClientes();
-    }
+
 
 
 }

@@ -9,7 +9,7 @@ import com.chila.tallermecanico.view.IListaContactos;
 
 import java.util.List;
 
-public class ListaContactosPresentador implements IListaContactosPresentador{
+public class    ListaContactosPresentador implements IListaContactosPresentador{
 
     private IListaContactos iListacontactos;
 
@@ -20,17 +20,10 @@ public class ListaContactosPresentador implements IListaContactosPresentador{
 
     public void obtenerClientes() {
         Database db = Database.getInstance();
-        db.getClientes(new FirestoreCallbackClientes() {
-            @Override
-            public void onCallBack(List<Cliente> listaClientes) {
-                mostrarClientes(listaClientes);
-            }
-        });
+        db.getClientes(this::mostrarClientes);
     }
 
     public void mostrarClientes(List<Cliente> listaClientes) {
-
-
         iListacontactos.inicializarAdaptador(iListacontactos.crearAdaptador(listaClientes));
         iListacontactos.generarLayout();
     }

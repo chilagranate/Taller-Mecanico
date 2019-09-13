@@ -45,7 +45,6 @@ public class NuevoCliente extends AppCompatActivity {
                 guardarContacto();
                 finish();
                 break;
-
         }
         return true;
     }

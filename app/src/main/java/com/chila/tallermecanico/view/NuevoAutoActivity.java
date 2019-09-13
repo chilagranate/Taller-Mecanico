@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chila.tallermecanico.Firestore.Database;
+import com.chila.tallermecanico.Firestore.FirestoreCallbackCliente;
 import com.chila.tallermecanico.R;
 import com.chila.tallermecanico.model.Auto;
 import com.chila.tallermecanico.model.Cliente;
@@ -21,6 +22,7 @@ import org.w3c.dom.Text;
 
 public class NuevoAutoActivity extends AppCompatActivity {
     private String idCliente;
+    private Cliente cliente;
     private TextView tvMarca, tvModelo, tvPatente, tvVin, tvKm;
     private ImageView imgAuto;
     private String[] listaTipoVehiculo;
@@ -34,8 +36,21 @@ public class NuevoAutoActivity extends AppCompatActivity {
         final Bundle parametros = getIntent().getExtras(); //Recupero el id de cliente
         if (parametros != null) {
             idCliente = parametros.getString("id");
-            referenciarViews();
+            Database db = Database.getInstance();
+            db.obtenerCliente(idCliente, new FirestoreCallbackCliente() {
+                @Override
+                public void onCallBack(Cliente cliente) {
+                    setCliente(cliente);
+                }
+            });
+
         }
+        referenciarViews();
+
+    }
+
+    public void setCliente(Cliente cliente){
+        this.cliente = cliente;
     }
 
     @Override
@@ -70,7 +85,8 @@ public class NuevoAutoActivity extends AppCompatActivity {
 
     public Auto crearAuto(){
         Auto auto = new Auto();
-        auto.setCliente(idCliente);
+
+        auto.setCliente(cliente);
         auto.setMarca(tvMarca.getText().toString());
         auto.setModelo(tvModelo.getText().toString());
         auto.setPatente(tvPatente.getText().toString());

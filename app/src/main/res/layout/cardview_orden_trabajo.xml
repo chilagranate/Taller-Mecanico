@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview_orden_trabajo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="4dp"
+    android:orientation="vertical"
+    android:layout_marginTop="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:elevation="8dp">
+
+
+    <RelativeLayout
+        android:id="@+id/cardview_layout_orden_trabajo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:id="@+id/cardview_orden_trabajo_auto_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+
+
+            tools:hint="Auto" />
+        <TextView
+            android:id="@+id/cardview_orden_trabajo_cliente_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cardview_orden_trabajo_auto_tv"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+
+
+            tools:hint="Cliente" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:orientation="vertical"
+
+            >
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:hint="Fecha de ingreso"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="5dp"
+                tools:ignore="RelativeOverlap" />
+            <TextView
+                android:id="@+id/orden_trabajo_fecha_entrada_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:hint="10/03/2019"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="1dp"
+                tools:ignore="RelativeOverlap" />
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

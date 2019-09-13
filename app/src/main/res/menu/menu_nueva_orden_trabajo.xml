@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_nueva_orden_trabajo_guardar"
+        android:orderInCategory="100"
+        android:title="@string/nuevo_auto_menu_agregar_auto"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_add"
+        />
+    <item
+        android:id="@+id/nueva_orden_trabajo_settings"
+        android:orderInCategory="101"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>

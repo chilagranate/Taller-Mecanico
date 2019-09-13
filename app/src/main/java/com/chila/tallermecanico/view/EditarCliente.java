@@ -46,12 +46,7 @@ public class EditarCliente extends AppCompatActivity {
 
     public void obtenerCliente(){
         Database db = Database.getInstance();
-        db.obtenerCliente(idCliente, new FirestoreCallbackCliente() {
-            @Override
-            public void onCallBack(Cliente cliente) {
-                mostrarCliente(cliente);
-            }
-        });
+        db.obtenerCliente(idCliente, this::mostrarCliente);
     }
 
     private void mostrarCliente(Cliente cliente){

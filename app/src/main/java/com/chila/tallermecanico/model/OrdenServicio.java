@@ -1,22 +1,20 @@
 package com.chila.tallermecanico.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OrdenTrabajo extends Comprobante
-
-{
+public class OrdenServicio {
     private String id;
-    private String user;
+    private Auto auto;
+
+
+    private String userMauth;
     private List<Pago> pagos;
-    private List<ItemComprobante> itemsOrdenTrabajo;
-    private List<NotaComprobante> notas;
 
 
 
     private Date fechaEntrada, fechaSalida, fechaEstimada;
-    private int naftaRestante;
+    private String naftaRestante;
     private boolean aceptado;
     private boolean finalizado;
     private boolean pagado;
@@ -25,11 +23,28 @@ public class OrdenTrabajo extends Comprobante
     private String fallaCliente;
     private String observacionesGenerales;
 
-    public OrdenTrabajo() {
+    public OrdenServicio() {
+    }
+
+
+    public Auto getAuto() {
+        return auto;
+    }
+
+    public void setAuto(Auto auto) {
+        this.auto = auto;
+    }
+
+    public String getUserMauth() {
+        return userMauth;
+    }
+
+    public void setUserMauth(String userMauth) {
+        this.userMauth = userMauth;
     }
 
     public String getUser() {
-        return user;
+        return userMauth;
     }
 
     public String getId() {
@@ -41,7 +56,7 @@ public class OrdenTrabajo extends Comprobante
     }
 
     public void setUser(String user) {
-        this.user = user;
+        this.userMauth = user;
     }
 
     public String getFallaCliente() {
@@ -67,21 +82,6 @@ public class OrdenTrabajo extends Comprobante
         this.pagos = pagos;
     }
 
-    public List<ItemComprobante> getItemsOrdenTrabajo() {
-        return itemsOrdenTrabajo;
-    }
-
-    public void setItemsOrdenTrabajo(List<ItemComprobante> itemsOrdenTrabajo) {
-        this.itemsOrdenTrabajo = itemsOrdenTrabajo;
-    }
-
-    public List<NotaComprobante> getNotas() {
-        return notas;
-    }
-
-    public void setNotas(List<NotaComprobante> notas) {
-        this.notas = notas;
-    }
 
     public Date getFechaEntrada() {
         return fechaEntrada;
@@ -107,11 +107,11 @@ public class OrdenTrabajo extends Comprobante
         this.fechaEstimada = fechaEstimada;
     }
 
-    public int getNaftaRestante() {
+    public String getNaftaRestante() {
         return naftaRestante;
     }
 
-    public void setNaftaRestante(int naftaRestante) {
+    public void setNaftaRestante(String naftaRestante) {
         this.naftaRestante = naftaRestante;
     }
 
@@ -138,4 +138,7 @@ public class OrdenTrabajo extends Comprobante
     public void setPagado(boolean pagado) {
         this.pagado = pagado;
     }
+
+
+
 }

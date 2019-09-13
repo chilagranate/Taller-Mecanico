@@ -5,10 +5,12 @@ import android.os.Bundle;
 
 import com.chila.tallermecanico.Firestore.Database;
 import com.chila.tallermecanico.R;
+import com.chila.tallermecanico.adapter.OrdenTrabajoAdapter;
+import com.chila.tallermecanico.model.OrdenServicio;
 import com.chila.tallermecanico.model.Usuario;
+import com.chila.tallermecanico.presenter.IMainActivityPresenter;
+import com.chila.tallermecanico.presenter.MainActivityPresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import android.view.View;
 
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -24,33 +26,38 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, IMainActivity  {
     private FirebaseAuth mAuth;
+    private IMainActivityPresenter presenter;
+
+    @BindView(R.id.ordenes_trabajo_rv)
+    RecyclerView rvOrdenesTrabajo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        presenter = new MainActivityPresenter(this);
 
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(currentUser ==null){
-            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-            startActivity(intent);
-        }
-        Database db = Database.getInstance();
-        db.obtenerUsuario();
-        Usuario usuario=Usuario.getInstance();
-        //agregarAutos();
+        checkmAuthUser();
+
 
         FloatingActionButton fab = findViewById(R.id.main_fab);
         fab.setOnClickListener(view -> startActivity(
@@ -63,6 +70,26 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.obtenerOrdenesTrabajo();
+    }
+
+    private void checkmAuthUser() {
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser ==null){
+            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+            startActivity(intent);
+        }
+        Database db = Database.getInstance();
+        db.obtenerUsuario();
+        Usuario usuario=Usuario.getInstance();
+        //agregarAutos();
     }
 
     @Override
@@ -123,6 +150,18 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void inicializarAdaptador(OrdenTrabajoAdapter adaptador) {
+        rvOrdenesTrabajo.setAdapter(adaptador);
+    }
+
+    public void generarLayout() {
+        rvOrdenesTrabajo.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public OrdenTrabajoAdapter crearAdaptador(List<OrdenServicio> ordenesTrabajo) {
+        return new OrdenTrabajoAdapter(ordenesTrabajo, this);
     }
 
 

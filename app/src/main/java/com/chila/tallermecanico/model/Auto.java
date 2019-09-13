@@ -1,10 +1,12 @@
 package com.chila.tallermecanico.model;
 
+import com.google.firebase.firestore.DocumentId;
+
 import java.util.List;
 
 public class Auto {
     private String id;
-    private String cliente;
+    private Cliente cliente;
     private String fotoPortada;
     private String patente;
     private String marca;
@@ -18,7 +20,7 @@ public class Auto {
     public Auto() {
     }
     public String toString(){
-        return this.patente;
+        return patente + ": " + marca + " " + modelo;
     }
     public String getId() {
         return id;
@@ -34,11 +36,11 @@ public class Auto {
         this.id = id;
     }
 
-    public String getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(String cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
@@ -51,11 +53,12 @@ public class Auto {
     }
 
     public String getPatente() {
-        return patente;
+
+        return patente.toUpperCase();
     }
 
     public void setPatente(String patente) {
-        this.patente = patente;
+        this.patente = patente.toUpperCase();
     }
 
     public String getMarca() {

@@ -66,21 +66,14 @@ public class VistaCliente extends AppCompatActivity implements IVistaContacto {
             presentador = new VistaContactoPresenter(this, idCliente);
         }
 
-        foto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                abrirSelectorImagen();
-            }
-        });
+        foto.setOnClickListener(v -> abrirSelectorImagen());
 
-        nuevoAuto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), NuevoAutoActivity.class);
-                intent.putExtra("id", idCliente);
-                startActivity(intent);
+        nuevoAuto.setOnClickListener(v -> {
 
-            }
+            Intent intent = new Intent(v.getContext(), NuevoAutoActivity.class);
+            intent.putExtra("id", idCliente);
+            startActivity(intent);
+
         });
 
 
@@ -88,7 +81,6 @@ public class VistaCliente extends AppCompatActivity implements IVistaContacto {
 
     public void inicializarAdaptador(AutoAdaptador adaptador) {
         rvAutos.setAdapter(adaptador);
-
     }
 
     public void generarLayout() {
@@ -126,11 +118,8 @@ public class VistaCliente extends AppCompatActivity implements IVistaContacto {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        presentador.obtenerCliente();
-    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -149,9 +138,7 @@ public class VistaCliente extends AppCompatActivity implements IVistaContacto {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement

@@ -8,6 +8,12 @@
     tools:context="com.chila.tallermecanico.view.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ordenes_trabajo_rv"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"/>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/main_fab"
         android:layout_width="wrap_content"
@@ -15,6 +21,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:srcCompat="@drawable/ic_add" />
 
 </RelativeLayout>

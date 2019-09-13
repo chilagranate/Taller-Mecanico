@@ -5,11 +5,12 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 
 import com.chila.tallermecanico.model.Auto;
 import com.chila.tallermecanico.model.Cliente;
 
-import com.chila.tallermecanico.model.OrdenTrabajo;
+import com.chila.tallermecanico.model.OrdenServicio;
 import com.chila.tallermecanico.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 
@@ -21,21 +22,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -80,47 +76,42 @@ public class Database {
 
     public void obtenerCliente(String id, final FirestoreCallbackCliente firestoreCallback) {
         dbClientes.document(id)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if (task.getResult() != null) {
-                                DocumentSnapshot document = task.getResult();
-                                cliente = document.toObject(Cliente.class);
-                                cliente.setId(document.getId());
-                                Log.d(TAG, document.getId() + " =>" + document.getData());
-                                firestoreCallback.onCallBack(cliente);
-                            }
-                        } else {
-                            Log.d(TAG, "No such document");
-                        }
+                .addSnapshotListener((documentSnapshot, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        Cliente cliente = documentSnapshot.toObject(Cliente.class);
+                        cliente.setId(documentSnapshot.getId());
+                        Log.d(TAG, documentSnapshot.getId() + " =>" + documentSnapshot.getData());
+                        firestoreCallback.onCallBack(cliente);
+
                     }
                 });
-
     }
 
     public void getClientes(final FirestoreCallbackClientes firestoreCallbackClientes) {
-        dbClientes.whereEqualTo("user", user.getUid()).get().addOnCompleteListener(task -> {
+        dbClientes
+                .whereEqualTo("user", user.getUid())
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+                    List<Cliente> clientes = new ArrayList<>();
+                    if (queryDocumentSnapshots != null) {
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            if (doc.get("user") != null) {
+                                Cliente cliente = doc.toObject(Cliente.class);
+                                cliente.setId(doc.getId());
+                                clientes.add(cliente);
+                            }
+                        }
+                    }
+                    firestoreCallbackClientes.onCallBack(clientes);
+                });
 
-            if (!task.isSuccessful()) {
-                Log.w(TAG, "Error getting documents.", task.getException());
-                return;
-            }
-
-            if (task.getResult() == null)
-                return;
-
-            List<Cliente> clientes = new ArrayList<>();
-            for (QueryDocumentSnapshot document : task.getResult()) {
-                Log.d(TAG, document.getId() + " =>" + document.getData());
-                Cliente cliente = document.toObject(Cliente.class);
-                cliente.setId(document.getId());
-                clientes.add(cliente);
-            }
-
-            firestoreCallbackClientes.onCallBack(clientes);
-        });
     }
 
     public void actualizarCliente(final Cliente cliente) {
@@ -165,7 +156,8 @@ public class Database {
                 });
     }
 
-    public void subirFotoCliente(final Cliente cliente, byte[] data, final FirestoreCallbackFoto firestoreCallbackFoto) {
+    public void subirFotoCliente(final Cliente cliente, byte[] data,
+                                 final FirestoreCallbackFoto firestoreCallbackFoto) {
         String path = "imgClientes/" + UUID.randomUUID() + ".PNG";
         StorageReference imgClientesRef = storage.getReference(path);
 
@@ -208,27 +200,6 @@ public class Database {
                 });
     }
 
-    public void obtenerFotoCliente() throws IOException {
-
-        File localFile = File.createTempFile("images", "jpg");
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference riversRef = storageRef.child("images/rivers.jpg");
-        riversRef.getFile(localFile)
-                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        // Successfully downloaded data to local file
-                        // ...
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle failed download
-                // ...
-            }
-        });
-
-    }
 
     //clientes
 
@@ -282,129 +253,146 @@ public class Database {
     //autos
     public void agregarAuto(final Auto auto) {
         auto.setUsermAuth(FirebaseAuth.getInstance().getUid());
-        dbAutos
-                .add(auto)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Auto creado con exito. " + auto.toString());
-                        } else {
-                            Log.w(TAG, "Error al agregar cliente. ");
-                        }
-                    }
-                });
+        dbClientes.document(auto.getCliente().getId()).collection("autos").add(auto).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "Auto creado con exito. " + auto.toString());
+                } else {
+                    Log.w(TAG, "Error al agregar cliente. ");
+                }
+            }
+        });
+
+
     }
 
-    public void obtenerAutosCliente(Cliente cliente, final FirestoreCallbackAuto firestoreCallbackAuto) {
-        dbAutos
+    public void obtenerAutosCliente(Cliente cliente,
+                                    final FirestoreCallbackAuto firestoreCallbackAuto) {
+        dbClientes
+                .document(cliente.getId())
+                .collection("autos")
                 .whereEqualTo("usermAuth", FirebaseAuth.getInstance().getUid())
-                .whereEqualTo("cliente", cliente.getId())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<Auto> autos = new ArrayList<>();
-                        if (task.getResult() != null) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Auto auto = document.toObject(Auto.class);
-                                auto.setId(document.getId());
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "error leyendo autos");
+                    }
+                    List<Auto> autos = new ArrayList<>();
+                    if (queryDocumentSnapshots != null) {
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            if (doc.get("usermAuth") != null) {
+                                Auto auto = doc.toObject(Auto.class);
+                                auto.setId(doc.getId());
                                 autos.add(auto);
                             }
-                            firestoreCallbackAuto.onCallBack(autos);
                         }
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, e);
+                    firestoreCallbackAuto.onCallBack(autos);
+                });
+
+
+    }
+
+    public void obtenerAutoPatente(String patente,
+                                    final FirestoreCallbackAutoPatente firestoreCallbackAutoPatente) {
+        db.collectionGroup("autos")
+                .whereEqualTo("patente", patente)
+                .whereEqualTo("usermAuth", FirebaseAuth.getInstance().getUid())
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "error leyendo auto");
+                    }
+                    Auto auto = new Auto();
+                    if (queryDocumentSnapshots != null) {
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            if (doc.get("usermAuth") != null) {
+                                auto = doc.toObject(Auto.class);
+                                auto.setId(doc.getId());
+
+                            }
+                        }
+                        firestoreCallbackAutoPatente.onCallBack(auto);
+
                     }
                 });
 
 
     }
+
+
+
     //autos
 
 
     //ordenes de trabajo
 
-    public void nuevaOrdenTrabajo(final OrdenTrabajo ordenTrabajo) {
-        ordenTrabajo.setUser(FirebaseAuth.getInstance().getUid());
+    public void nuevaOrdenTrabajo(final OrdenServicio ordenServicio) {
+        ordenServicio.setUser(FirebaseAuth.getInstance().getUid());
         dbOrdenesTrabajo
-                .add(ordenTrabajo)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Orden de trabajo creada con exito. " + ordenTrabajo.toString());
-                        } else {
-                            //error al cargar
-                            Log.d(TAG, "Error al cargar orden de trabajo");
-                        }
+                .add(ordenServicio)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "Orden de trabajo creada con exito. " + ordenServicio.toString());
+                    } else {
+                        //error al cargar
+                        Log.d(TAG, "Error al cargar orden de trabajo");
                     }
                 });
 
     }
 
-    public void obtenerOrdenesTrabajo(final FirestoreCallbackOrdenesTrabajo firestoreCallbackOrdenesTrabajo) {
+    public void obtenerOrdenesServicio(
+            final FirestoreCallbackOrdenesTrabajo firestoreCallbackOrdenesTrabajo) {
         dbOrdenesTrabajo
                 .whereEqualTo("user", FirebaseAuth.getInstance().getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<OrdenTrabajo> ordenesTrabajo = new ArrayList<>();
-                        if (task.getResult() != null) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                OrdenTrabajo ordenTrabajo = document.toObject(OrdenTrabajo.class);
-                                ordenTrabajo.setId(document.getId());
-                                ordenesTrabajo.add(ordenTrabajo);
-                            }
-                            firestoreCallbackOrdenesTrabajo.onCallback(ordenesTrabajo);
-                        }
+                .addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "error al obtener ordenes de trabajo");
-                    }
-                });
-
-    }
-
-    public void obtenerOrdenTrabajo(String id, final FiresotreCallbackOrdenTrabajo firesotreCallbackOrdenTrabajo) {
-        dbClientes.document(id)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if (task.getResult() != null) {
-                                DocumentSnapshot document = task.getResult();
-                                OrdenTrabajo ordenTrabajo = document.toObject(OrdenTrabajo.class);
-                                ordenTrabajo.setId(document.getId());
-                                Log.d(TAG, document.getId() + " =>" + document.getData());
-                                firesotreCallbackOrdenTrabajo.onCallback(ordenTrabajo);
-                            }
-                        } else {
-                            Log.d(TAG, "No such document");
-
+                    List<OrdenServicio> ordenesTrabajo = new ArrayList<>();
+                    if (queryDocumentSnapshots != null) {
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            OrdenServicio ordenServicio = doc.toObject(OrdenServicio.class);
+                            ordenServicio.setId(doc.getId());
+                            ordenesTrabajo.add(ordenServicio);
                         }
+                        firestoreCallbackOrdenesTrabajo.onCallback(ordenesTrabajo);
                     }
                 });
     }
 
-    public void actualizarOrdenTrabajo(final OrdenTrabajo ordenTrabajo) {
+    public void obtenerOrdenServicio(String id,final FiresotreCallbackOrdenTrabajo firesotreCallbackOrdenTrabajo) {
+        dbOrdenesTrabajo.document(id)
+                .addSnapshotListener((documentSnapshot, e) -> {
+                    if(e!=null){
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        //MutableLiveData<OrdenServicio> ordenServicioMutableLiveData = new MutableLiveData<>();
+                        OrdenServicio ordenServicio = documentSnapshot.toObject(OrdenServicio.class);
+                        ordenServicio.setId(documentSnapshot.getId());
+                        Log.d(TAG, documentSnapshot.getId() + " =>" + documentSnapshot.getData());
+                        //ordenServicioMutableLiveData.setValue(ordenServicio);
+                        firesotreCallbackOrdenTrabajo.onCallback(ordenServicio);
+                    }
+                });
+
+
+    }
+
+
+
+    public void actualizarOrdenTrabajo(final OrdenServicio ordenServicio) {
         dbOrdenesTrabajo
                 .document(cliente.getId())
-                .set(ordenTrabajo)
+                .set(ordenServicio)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, ordenTrabajo.getId() + " => actualizada");
+                            Log.d(TAG, ordenServicio.getId() + " => actualizada");
                         } else {
                             Log.w(TAG, "Error actualizando orden trabajo");
                         }
@@ -412,18 +400,15 @@ public class Database {
                 });
     }
 
-    public void borrarOrdenTrabajo(final OrdenTrabajo ordenTrabajo) {
+    public void borrarOrdenTrabajo(final OrdenServicio ordenServicio) {
         dbOrdenesTrabajo
-                .document(ordenTrabajo.getId())
+                .document(ordenServicio.getId())
                 .delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, ordenTrabajo.getId() + "=> Orden de trabajo eliminada con exito. " + ordenTrabajo.toString());
-                        } else {
-                            Log.w(TAG, "Error borrando cliente. " + ordenTrabajo.getId());
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, ordenServicio.getId() + "=> Orden de trabajo eliminada con exito. " + ordenServicio.toString());
+                    } else {
+                        Log.w(TAG, "Error borrando cliente. " + ordenServicio.getId());
                     }
                 });
     }

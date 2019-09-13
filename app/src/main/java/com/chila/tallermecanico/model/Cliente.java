@@ -1,21 +1,12 @@
 package com.chila.tallermecanico.model;
 
-import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
+
 
 public class Cliente {
 
@@ -29,6 +20,9 @@ public class Cliente {
     private String direccion;
     private String fotoUrl;
     private int foto;
+
+
+
 
 
     public String getFotoUrl() {
